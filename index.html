@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#12273d">
+<title>Informatikai leltározó | telefonos vonalkódolvasó</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1828;--panel:#15283e;--line:#35506a;--text:#f2f7fd;--muted:#a8bdd1;--accent:#5db7ff;--good:#72ebaa;--warn:#fbd16d;--bad:#ff8888}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px}main{max-width:630px;margin:0 auto;padding:18px 16px 60px}h1{font-size:24px;margin:6px 0 4px}h2{font-size:18px;margin:0 0 13px}p{line-height:1.5;margin:7px 0}.muted,small{color:var(--muted)}header{display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin:13px 0}label{display:block;font-weight:600;font-size:14px;margin:12px 0 6px}input{width:100%;border:1px solid #56708a;background:#0d1d2e;color:var(--text);padding:14px 12px;font-size:17px;border-radius:11px;outline:0}input:focus{border-color:#6ab9ff}button{background:#389cde;border:0;color:#071a29;font-size:16px;font-weight:750;padding:12px 16px;border-radius:11px;cursor:pointer}button.secondary{color:#dfebf6;background:#304963}button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}button:disabled{opacity:.42;cursor:not-allowed}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.buttons button{flex:1;min-width:120px}.mini{font-size:13px;padding:8px 11px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:#19344f;border-radius:11px;padding:12px;text-align:center}.stat strong{display:block;font-size:26px;line-height:1.25}.stat span{font-size:12px;color:var(--muted)}.video-wrap{position:relative;border-radius:14px;overflow:hidden;min-height:180px;background:#070e17}.video-wrap video{width:100%;height:255px;display:block;object-fit:cover}.line{position:absolute;left:12%;right:12%;top:48%;height:2px;background:#69d5ff;box-shadow:0 0 13px #69d5ff;pointer-events:none}.message{border-radius:12px;padding:14px;margin:12px 0;background:#23415b;line-height:1.5;min-height:62px}.message.good{background:#143f32;border:1px solid #338e66}.message.warn{background:#54411a;border:1px solid #bf9c42}.message.bad{background:#532b32;border:1px solid #ad5663}.message strong{display:block;font-size:19px}.inline{display:flex;gap:8px}.inline input{min-width:0;flex:1}.inline button{white-space:nowrap}.hidden{display:none!important}.preview{color:#bcd1e4;font-size:13px;margin:8px 0}.summary{font-size:13px}.pill{display:inline-block;background:#37516c;padding:5px 9px;border-radius:20px;color:#dfedf7;font-size:12px}footer{margin-top:25px;font-size:12px;color:#7d9ab5}details summary{cursor:pointer;font-weight:700}code{background:#263c53;padding:2px 5px;border-radius:5px}#missing{max-height:220px;overflow:auto}#missing div{border-top:1px solid #34516b;padding:9px 0;font-size:14px}.smallgap{margin-top:3px}.faint{opacity:.7}@media(max-width:390px){main{padding-left:11px;padding-right:11px}.inline button{padding:10px 12px}.stat strong{font-size:22px}}
+</style>
+<script src="https://unpkg.com/@zxing/browser@0.2.1/umd/zxing-browser.min.js" defer></script>
+</head>
+<body>
+<main>
+<header><div><h1>📦 Informatikai leltározó</h1><p class="muted">Vonalkódos iskolai eszközleltár</p></div><button class="ghost mini" id="settingsBtn">Beállítás</button></header>
+<div class="panel" id="settings">
+<h2>Kapcsolódás a Google-táblázathoz</h2>
+<label for="url">Apps Script webalkalmazás címe (…/exec)</label>
+<input id="url" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off" spellcheck="false">
+<label for="token">Titkos hozzáférési kulcs</label>
+<input id="token" type="password" placeholder="Az elokeszites() által kiírt kulcs" autocomplete="off">
+<div class="buttons"><button id="connect">Csatlakozás és frissítés</button></div>
+<small>A beállítások csak ezen a készüléken tárolódnak. A kulcsot ne oszd meg másokkal.</small>
+</div>
+<div class="panel">
+<div class="stats">
+ <div class="stat"><strong id="total">–</strong><span>Nyilvántartott</span></div>
+ <div class="stat"><strong id="found">–</strong><span>Megtalált</span></div>
+ <div class="stat"><strong id="missingCount">–</strong><span>Hátralévő</span></div>
+</div>
+<p class="preview" id="source">Nincs betöltve Google-táblázat.</p>
+</div>
+<div class="panel">
+<label for="room">Melyik helyiségben vagy most?</label>
+<input id="room" list="rooms" placeholder="Pl. 203-as terem" autocomplete="off">
+<datalist id="rooms"></datalist>
+<p class="smallgap muted" style="font-size:13px">A szkennelt eszközök tényleges helyisége ez lesz. Teremváltáskor írd át.</p>
+<div class="video-wrap"><video id="camera" autoplay muted playsinline></video><div class="line"></div></div>
+<div class="buttons"><button id="start" disabled>Kamera indítása</button><button id="stop" class="secondary" disabled>Kamera leállítása</button></div>
+<p class="preview">A hátlapi kamerával olvass. A leltári vonalkódot tartsd vízszintesen a kék vonalnál.</p>
+<label for="manual">Kézi bevitel, ha nem olvasható a matrica</label>
+<div class="inline"><input id="manual" inputmode="text" placeholder="BA-0189415" autocapitalize="characters"><button id="send" disabled>Rögzítés</button></div>
+<div id="result" class="message" role="status" aria-live="polite">Csatlakozás után indítható a leltározás.</div>
+<div class="buttons hidden" id="retryWrap"><button id="retry" class="secondary">Az előző mentés újrapróbálása</button></div>
+</div>
+<details class="panel"><summary>Hiányzó eszközök (<span id="missingDetail">–</span>)</summary><p class="muted summary">Azok az eszközök, amelyeket még egyszer sem olvastál be.</p><div id="missing"></div></details>
+<footer>Az eredeti leltárlap változatlan marad. A rögzítések a <code>LELTAR_BEOLVASASOK</code> munkalapra kerülnek. A kamera képét a böngésző dolgozza fel, nem kerül a táblázatba.</footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+let inventory = new Map();
+let controls = null, reader = null, busy = false, last = {code:'',at:0}, cameraSeen = {code:'',at:0}, pending = null;
+let apiUrl = localStorage.getItem('ba_api') || 'https://script.google.com/macros/s/AKfycby9oGkR_M0aHrl3-Bf5R9OOwpN_7BlO1USWAlO7MBqBATyYDFET2lJqQWqylmagolhnmg/exec';
+let apiToken = localStorage.getItem('ba_token') || '';
+$('url').value = apiUrl;
+$('token').value = apiToken;
+$('room').value = localStorage.getItem('ba_room') || '';
+$('settingsBtn').onclick = () => $('settings').classList.toggle('hidden');
+$('room').oninput = () => localStorage.setItem('ba_room', $('room').value.trim());
+function message(title, detail, type='') {
+ const node = $('result'); node.className = 'message ' + type;
+ node.replaceChildren();
+ const strong = document.createElement('strong'); strong.textContent = title; node.append(strong);
+ if (detail) {const div=document.createElement('div');div.textContent=detail;node.append(div);}
+}
+function normalize(raw) {
+ const s=String(raw ?? '').toUpperCase().trim().replace(/[‐‑‒–—−]/g,'-').replace(/\s+/g,'');
+ if(!s)return '';
+ const m=/^(BA|AA)-?(\d{6,10})$/.exec(s);
+ if(m)return m[1]+'-'+m[2];
+ if(/^\d{6,10}$/.test(s))return 'BA-'+s;
+ return /^[A-Z0-9][A-Z0-9._/-]{3,49}$/.test(s)?s:'';
+}
+function checkConfig() {
+ apiUrl = $('url').value.trim();apiToken = $('token').value.trim();
+ if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec\/?$/.test(apiUrl))
+   throw new Error('Érvénytelen cím. A telepített /exec végű Apps Script link kell.');
+ if (apiToken.length < 32) throw new Error('Hiányzik a titkos hozzáférési kulcs.');
+}
+function requestJsonp(params) {
+ return new Promise((resolve,reject)=>{
+  const callback='baCallback_'+Math.random().toString(36).slice(2);
+  const script=document.createElement('script');
+  let finished=false;
+  const finish=(err,data)=>{if(finished)return;finished=true;clearTimeout(timer);delete window[callback];script.remove();err?reject(err):resolve(data);};
+  const timer=setTimeout(()=>finish(new Error('Időtúllépés (Google-kapcsolat).')),12000);
+  window[callback]=data=>finish(null,data);
+  script.onerror=()=>finish(new Error('A Google Apps Script nem érhető el. Ellenőrizd a webapp megosztását.'));
+  const u=new URL(apiUrl);
+  Object.entries({...params,token:apiToken,callback,_:Date.now()}).forEach(([key,value])=>u.searchParams.set(key,value));
+  script.src=u.toString();document.head.append(script);
+ });
+}
+function populate(data) {
+ inventory = new Map((data.items||[]).map(x=>[x.code,x]));
+ $('total').textContent=data.totalUnique;
+ $('source').textContent=`Forráslap: ${data.sheetName} • Beolvasási események: ${data.scanEvents} • Listán kívüli egyedi kódok: ${data.extraUnique}`;
+ const rooms=[...new Set(data.items.map(x=>x.expectedRoom).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'hu'));
+ $('rooms').replaceChildren(...rooms.map(room=>{const opt=document.createElement('option');opt.value=room;return opt;}));
+ renderCounts();
+ $('start').disabled=false;$('send').disabled=false;
+ $('settings').classList.add('hidden');
+ message('Kapcsolódva.','Válassz helyiséget, majd indítsd a kamerát.','good');
+}
+function renderCounts() {
+ const items=[...inventory.values()];const done=items.filter(x=>x.scanned).length;
+ $('found').textContent=done;$('missingCount').textContent=items.length-done;
+ $('missingDetail').textContent=items.length-done;
+ const missing=items.filter(x=>!x.scanned);
+ $('missing').replaceChildren(...missing.slice(0,120).map(item=>{
+  const div=document.createElement('div');
+  div.textContent=`${item.code} · ${item.name}${item.expectedRoom?' · '+item.expectedRoom:''}`;
+  return div;
+ }));
+ if (missing.length>120) {
+  const div=document.createElement('div');div.textContent=`…és még ${missing.length-120} eszköz.`;$('missing').append(div);
+ }
+}
+async function loadInventory() {
+ try {
+  checkConfig();message('Kapcsolódás…','Google-táblázat lekérése.');
+  const data=await requestJsonp({action:'list'});
+  if(!data.ok)throw new Error(data.error || 'Ismeretlen válasz.');
+  localStorage.setItem('ba_api',apiUrl);localStorage.setItem('ba_token',apiToken);
+  populate(data);
+  const old = localStorage.getItem('ba_pending');
+  if (old) {
+   try {pending=JSON.parse(old);$('retryWrap').classList.remove('hidden');message('Korábbi mentés ellenőrizhető','Használd az „Az előző mentés újrapróbálása” gombot.','warn');} catch {localStorage.removeItem('ba_pending');}
+  }
+ } catch(err){message('Nem sikerült csatlakozni',err.message,'bad');}
+}
+$('connect').onclick=loadInventory;
+function ensureRoom() {
+ const room=$('room').value.trim();
+ if(!room){message('Hiányzik a helyiség','Írd be, melyik teremben vagy.','warn');$('room').focus();return '';}return room;
+}
+async function startCamera() {
+ if(!ensureRoom())return;
+ if (typeof ZXingBrowser==='undefined') {message('Nem töltődött be a vonalkódolvasó','Ellenőrizd az internetkapcsolatot, és frissítsd az oldalt.','bad');return;}
+ if(controls)return;
+ $('start').disabled=true;
+ try {
+  reader = new ZXingBrowser.BrowserMultiFormatReader();
+  controls=await reader.decodeFromConstraints({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}},$('camera'),(res,err)=>{
+   if (res) {
+    const code=normalize(res.getText());
+    const now=Date.now();
+    const stillInFrame=(code===cameraSeen.code && now-cameraSeen.at<1800);
+    cameraSeen={code,at:now};
+    if(code && !stillInFrame) submitCode(code);
+   }
+  });
+  $('stop').disabled=false;message('Kamera aktív','Olvasd be az első BA-matricát.','good');
+ } catch(err){$('start').disabled=false;message('Nem indult a kamera',err.message+' · Próbáld a telefon Chrome böngészőjében HTTPS oldalon.','bad');}
+}
+function stopCamera() {
+ if(controls){controls.stop();controls=null;}
+ const stream=$('camera').srcObject;
+ if(stream){stream.getTracks().forEach(t=>t.stop());$('camera').srcObject=null;}
+ $('start').disabled=inventory.size===0;$('stop').disabled=true;
+}
+$('start').onclick=startCamera;$('stop').onclick=stopCamera;
+function operationId(){return 'ba_'+(crypto.randomUUID?crypto.randomUUID().replaceAll('-',''):String(Date.now())+Math.random().toString(36).slice(2));}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+async function verify(id) {
+ for(const ms of [650,1000,1400,1800,2400,3000]) {
+  await sleep(ms);
+  try {const x=await requestJsonp({action:'check',requestId:id});if(!x.ok)throw new Error(x.error||'Ellenőrzési hiba');if(x.found)return x.data;}catch(err){console.warn('Ellenőrzés:',err.message);}
+ }
+ return null;
+}
+function showSaved(data) {
+ const lookup=inventory.get(data.code);
+ if(lookup)lookup.scanned=true;
+ renderCounts();
+ const statuses={
+  'RENDBEN':['✓ Sikeresen leltározva','good'],
+  'MÁS_HELYEN':['↔ Másik helyiségben található','warn'],
+  'NINCS_A_LISTÁBAN':['! Nincs a forráslistában','bad'],
+  'ISMÉTELT':['↻ Ezt már beolvastad','warn']
+ };
+ const title=statuses[data.status]||['Rögzítve','good'];
+ const description=[data.code,data.name, data.expectedRoom?'Nyilvántartás: '+data.expectedRoom:'', 'Most itt: '+data.actualRoom].filter(Boolean).join(' • ');
+ message(title[0],description,title[1]);
+ if(navigator.vibrate)navigator.vibrate(data.status==='RENDBEN'?70:[70,60,70]);
+}
+async function sendPending() {
+ if(!pending||busy)return;
+ busy=true;$('send').disabled=true;
+ const op=pending;
+ message('Mentés folyamatban…',`${op.code} · ${op.room}`);
+ try {
+  // Egyszerű, CORS-előellenőrzés nélküli POST. Választ nem olvasunk belőle.
+  try {await fetch(apiUrl,{method:'POST',mode:'no-cors',redirect:'follow',headers:{'Content-Type':'text/plain'},body:JSON.stringify(op)});} catch(err){console.warn('POST:',err.message);}
+  const data=await verify(op.requestId);
+  if(!data)throw new Error('A szerver nem igazolta vissza a mentést. Ellenőrizd a kapcsolatot, és próbáld újra ugyanazt a műveletet.');
+  showSaved(data);
+  pending=null;localStorage.removeItem('ba_pending');$('retryWrap').classList.add('hidden');
+ } catch(err){message('A mentés nincs visszaigazolva',err.message,'bad');$('retryWrap').classList.remove('hidden');}
+ finally{busy=false;$('send').disabled=false;}
+}
+async function submitCode(raw) {
+ if(busy||pending)return;
+ const room=ensureRoom();if(!room)return;
+ if(!apiUrl||!apiToken||inventory.size===0){message('Nincs kapcsolódva','Előbb töltsd be a Google-táblázatot.','warn');return;}
+ const code=normalize(raw);
+ if(!code){message('Nem támogatott leltári kód','Például BA-0189415, AA-0085300 vagy KE030005300B.','bad');return;}
+ if(code===last.code&&Date.now()-last.at<3500)return;
+ last={code,at:Date.now()};
+ pending={action:'scan',token:apiToken,requestId:operationId(),code,room};
+ localStorage.setItem('ba_pending',JSON.stringify(pending));
+ $('manual').value='';
+ await sendPending();
+}
+$('send').onclick=()=>submitCode($('manual').value);
+$('manual').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitCode($('manual').value);}});
+$('retry').onclick=sendPending;
+window.addEventListener('pagehide',stopCamera);
+if(apiUrl&&apiToken)loadInventory();
+</script>
+</body>
+</html>
