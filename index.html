@@ -37,8 +37,9 @@
 <datalist id="rooms"></datalist>
 <p class="smallgap muted" style="font-size:13px">A szkennelt eszközök tényleges helyisége ez lesz. Teremváltáskor írd át.</p>
 <div class="video-wrap"><video id="camera" autoplay muted playsinline></video><div class="line"></div></div>
+<p id="cameraStatus" class="preview" role="status" aria-live="polite">A kamera még nincs elindítva.</p>
 <div class="buttons"><button id="start" disabled>Kamera indítása</button><button id="stop" class="secondary" disabled>Kamera leállítása</button></div>
-<p class="preview">A hátlapi kamerával olvass. A leltári vonalkódot tartsd vízszintesen a kék vonalnál.</p>
+<p class="preview">A hátlapi kamerával olvass. A BA-vonalkód legyen középen, a két szélén a fehér sáv is látszódjon. A kék vonal csak célzójel.</p>
 <label for="manual">Kézi bevitel, ha nem olvasható a matrica</label>
 <div class="inline"><input id="manual" inputmode="text" placeholder="BA-0189415" autocapitalize="characters"><button id="send" disabled>Rögzítés</button></div>
 <div id="result" class="message" role="status" aria-live="polite">Csatlakozás után indítható a leltározás.</div>
@@ -52,6 +53,8 @@
 const $ = id => document.getElementById(id);
 let inventory = new Map();
 let controls = null, reader = null, busy = false, last = {code:'',at:0}, cameraSeen = {code:'',at:0}, pending = null;
+let nativeDetector = null, nativeTimer = null, nativeBusy = false, scanTick = 0;
+let nativeScannerName = 'ZXing';
 let apiUrl = localStorage.getItem('ba_api') || 'https://script.google.com/macros/s/AKfycby9oGkR_M0aHrl3-Bf5R9OOwpN_7BlO1USWAlO7MBqBATyYDFET2lJqQWqylmagolhnmg/exec';
 let apiToken = localStorage.getItem('ba_token') || '';
 $('url').value = apiUrl;
@@ -136,30 +139,79 @@ function ensureRoom() {
  const room=$('room').value.trim();
  if(!room){message('Hiányzik a helyiség','Írd be, melyik teremben vagy.','warn');$('room').focus();return '';}return room;
 }
+function acceptCameraCode(raw, engine) {
+ const code=normalize(raw);
+ const now=Date.now();
+ if(!code) return;
+ const stillInFrame=(code===cameraSeen.code && now-cameraSeen.at<1800);
+ cameraSeen={code,at:now};
+ $('cameraStatus').textContent='Felismerte: '+code+' ('+engine+').';
+ if(!stillInFrame) submitCode(code);
+}
+async function enableNativeScanner() {
+ // Második, független olvasó a telefon Chromium/Android vonalkódfelismerő API-jával.
+ // Ha nem támogatott, az eddigi ZXing továbbra is működik.
+ if(!('BarcodeDetector' in window)) return false;
+ try {
+  const available=await window.BarcodeDetector.getSupportedFormats();
+  const formats=['code_128','code_39','code_93','itf','codabar','ean_13','ean_8','upc_a','upc_e']
+    .filter(x=>available.includes(x));
+  if(!formats.length)return false;
+  nativeDetector=new window.BarcodeDetector({formats});
+  nativeTimer=setInterval(async()=>{
+   const video=$('camera');
+   if(!controls||nativeBusy||busy||!video||video.readyState<2)return;
+   nativeBusy=true;
+   try {
+    const found=await nativeDetector.detect(video);
+    if(found&&found.length){
+     // A korábban beolvasott termékkódot is csak valóban felismertként jelöljük.
+     acceptCameraCode(found[0].rawValue,'Telefonos felismerő');
+    }
+   }catch(err){console.debug('Natív olvasó:',err.message);}
+   finally{nativeBusy=false;}
+  },320);
+  return true;
+ }catch(err){console.debug('Natív olvasó nem érhető el:',err.message);return false;}
+}
 async function startCamera() {
  if(!ensureRoom())return;
- if (typeof ZXingBrowser==='undefined') {message('Nem töltődött be a vonalkódolvasó','Ellenőrizd az internetkapcsolatot, és frissítsd az oldalt.','bad');return;}
+ if(typeof ZXingBrowser==='undefined') {
+  message('Nem töltődött be a vonalkódolvasó','Ellenőrizd az internetkapcsolatot, és frissítsd az oldalt.','bad');return;
+ }
  if(controls)return;
  $('start').disabled=true;
+ $('cameraStatus').textContent='Kamera indítása…';
  try {
-  reader = new ZXingBrowser.BrowserMultiFormatReader();
-  controls=await reader.decodeFromConstraints({audio:false,video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}},$('camera'),(res,err)=>{
-   if (res) {
-    const code=normalize(res.getText());
-    const now=Date.now();
-    const stillInFrame=(code===cameraSeen.code && now-cameraSeen.at<1800);
-    cameraSeen={code,at:now};
-    if(code && !stillInFrame) submitCode(code);
-   }
+  // 1080p jobb eredményt ad a sűrű, kis méretű BA-matricáknál, ha a telefon támogatja.
+  reader=new ZXingBrowser.BrowserMultiFormatReader();
+  controls=await reader.decodeFromConstraints({audio:false,video:{
+    facingMode:{ideal:'environment'},
+    width:{ideal:1920},height:{ideal:1080}
+  }},$('camera'),(res,err)=>{
+   if(res)acceptCameraCode(res.getText(),'ZXing');
   });
-  $('stop').disabled=false;message('Kamera aktív','Olvasd be az első BA-matricát.','good');
- } catch(err){$('start').disabled=false;message('Nem indult a kamera',err.message+' · Próbáld a telefon Chrome böngészőjében HTTPS oldalon.','bad');}
+  $('stop').disabled=false;
+  const video=$('camera');
+  const native=await enableNativeScanner();
+  const size=(video.videoWidth&&video.videoHeight)? `${video.videoWidth}×${video.videoHeight}` : 'ismeretlen';
+  $('cameraStatus').textContent=`Kamera aktív: ${size} · ${native?'Két vonalkódfelismerő fut':'ZXing olvasó fut'}.`;
+  message('Kamera aktív','A sűrű BA-matricát tartsd vízszintesen, legyen látható a teljes címke.','good');
+ } catch(err){
+  stopCamera();
+  $('start').disabled=false;
+  $('cameraStatus').textContent='A kamera nem indult.';
+  message('Nem indult a kamera',err.message+' · Próbáld a telefon Chrome böngészőjében HTTPS oldalon.','bad');
+ }
 }
 function stopCamera() {
+ if(nativeTimer){clearInterval(nativeTimer);nativeTimer=null;}
+ nativeDetector=null;nativeBusy=false;
  if(controls){controls.stop();controls=null;}
  const stream=$('camera').srcObject;
  if(stream){stream.getTracks().forEach(t=>t.stop());$('camera').srcObject=null;}
  $('start').disabled=inventory.size===0;$('stop').disabled=true;
+ $('cameraStatus').textContent='Kamera leállítva.';
 }
 $('start').onclick=startCamera;$('stop').onclick=stopCamera;
 function operationId(){return 'ba_'+(crypto.randomUUID?crypto.randomUUID().replaceAll('-',''):String(Date.now())+Math.random().toString(36).slice(2));}
