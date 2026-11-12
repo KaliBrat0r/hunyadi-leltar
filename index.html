@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#12273d">
-<title>Hunyadi leltározó 6.0 – X/Y és főtábla számlálók</title>
+<title>Hunyadi leltározó 6.1 – Y-alapú találati jelzés</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1828;--panel:#15283e;--line:#35506a;--text:#f2f7fd;--muted:#a8bdd1;--accent:#5db7ff;--good:#72ebaa;--warn:#fbd16d;--bad:#ff8888}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px}main{max-width:630px;margin:0 auto;padding:18px 16px 70px}h1{font-size:24px;margin:5px 0}h2{font-size:18px;margin:0 0 13px}p{line-height:1.45;margin:8px 0}.muted,small{color:var(--muted)}header{display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin:13px 0}label{display:block;font-weight:650;font-size:14px;margin:12px 0 6px}input,select,textarea{width:100%;border:1px solid #56708a;background:#0d1d2e;color:var(--text);padding:13px 12px;font-size:16px;border-radius:11px;outline:none}input:focus,select:focus,textarea:focus{border-color:#6ab9ff}textarea{min-height:82px;resize:vertical;font-family:inherit;line-height:1.4}button{background:#389cde;border:0;color:#071a29;font-size:16px;font-weight:750;padding:12px 16px;border-radius:11px;cursor:pointer}button.secondary{color:#dfebf6;background:#304963}button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}button:disabled{opacity:.42;cursor:not-allowed}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.buttons button{flex:1;min-width:115px}.mini{font-size:13px;padding:8px 11px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stats+.stats{margin-top:9px}.itstat{background:#164640}.itstat strong{color:#9af0c6}.stat{background:#19344f;border-radius:11px;padding:12px;text-align:center}.stat strong{display:block;font-size:26px;line-height:1.25}.stat span{font-size:12px;color:var(--muted)}.video-wrap{position:relative;border-radius:14px;overflow:hidden;min-height:180px;background:#070e17}.video-wrap video{width:100%;height:255px;display:block;object-fit:cover}.line{position:absolute;left:12%;right:12%;top:48%;height:2px;background:#69d5ff;box-shadow:0 0 13px #69d5ff;pointer-events:none}.message{border-radius:12px;padding:14px;margin:12px 0;background:#23415b;line-height:1.5;min-height:62px}.message.good{background:#143f32;border:1px solid #338e66}.message.warn{background:#54411a;border:1px solid #bf9c42}.message.bad{background:#532b32;border:1px solid #ad5663}.message strong{display:block;font-size:19px}.inline{display:flex;gap:8px}.inline input{min-width:0;flex:1}.inline button{white-space:nowrap}.hidden{display:none!important}.preview{color:#bcd1e4;font-size:13px;margin:8px 0}.summary{font-size:13px}.pill{display:inline-block;background:#37516c;padding:5px 9px;border-radius:20px;color:#dfedf7;font-size:12px}footer{margin-top:25px;font-size:12px;color:#7d9ab5}details summary{cursor:pointer;font-weight:700}code{background:#263c53;padding:2px 5px;border-radius:5px}#missing,#missingIt{max-height:220px;overflow:auto}#missing div,#missingIt div{border-top:1px solid #34516b;padding:9px 0;font-size:14px}.capture-box{border:2px solid var(--accent);background:#173c59;border-radius:14px;padding:14px;margin:15px 0}.capture-box .bigcode{font-weight:800;font-size:25px;word-break:break-word;letter-spacing:.025em}.capture-box .detail{white-space:pre-line;line-height:1.45;font-size:14px;margin-top:8px}.capture-box.duplicate{border-color:#edc36d;background:#47391d}.capture-box label{margin-top:10px}.search-result{white-space:pre-line;font-size:14px;line-height:1.6;padding-top:10px}.section-note{font-size:13px;color:var(--muted)}.collapsed{padding:0}.collapsed summary{padding:16px}.collapsed .inner{padding:0 16px 16px;border-top:1px solid var(--line)}@media(max-width:390px){main{padding-left:11px;padding-right:11px}.inline button{padding:10px 12px}.stat strong{font-size:22px}}
@@ -44,7 +44,7 @@
 <label for="room">Tényleges leltározási helyiség</label>
 <select id="room"><option value="">Először csatlakozz a táblázathoz</option></select>
 
-<p class="section-note">A lista a táblázat Y oszlopához tartozó helyiségtörzsből származik.</p>
+<p class="section-note">A lista a táblázat Y oszlopához tartozó helyiségtörzsből származik. A megtaláltságot a közös főtábla Y oszlopa dönti el; a telefonos naplót külön mutatjuk.</p>
 <label for="mode">Vonalkód-felismerő</label>
 <select id="mode"><option value="mixed">Vegyes – ZXing + telefonos olvasó</option><option value="native">Csak telefonos / böngészős olvasó</option><option value="zxing">Csak ZXing olvasó</option></select>
 <div class="video-wrap"><video id="camera" autoplay muted playsinline></video><div class="line"></div></div>
@@ -59,7 +59,7 @@
  <label for="captureNote">Megjegyzés (X oszlop, opcionális)</label><textarea id="captureNote" maxlength="400" placeholder="Például: 2 db, karcos burkolat, hiányzó tápegység"></textarea>
  <p class="section-note">Üresen hagyva az eredeti X érték megmarad. A kolléga X mezőjét szinkronizáláskor külön ellenőrizzük.</p>
  <div class="buttons"><button id="captureSave">Rögzítem</button><button id="captureNoteSave" class="secondary hidden">Megjegyzés frissítése</button><button class="secondary" id="captureSkip">Kihagyom / új beolvasás</button></div>
- <p class="section-note">A felismerés önmagában SEMMIT nem ment. Csak a „Rögzítem” gomb.</p>
+ <p class="section-note">A felismerés önmagában SEMMIT nem ment. Ha a főtábla Y már kitöltött, az eszköz megtaláltnak számít, de külön naplózhatod a telefonos beolvasást. A főtábla állapota az utolsó frissítésből származik.</p>
 </div>
 <div id="result" class="message" role="status" aria-live="polite">Csatlakozás után elindítható a leltározás.</div>
 <div class="buttons hidden" id="retryWrap"><button id="retry" class="secondary">Az előző mentés újrapróbálása</button></div>
@@ -189,6 +189,7 @@ async function refreshOfficialCounts(){
   const data=await requestJsonp({action:'officialStats'});
   if(!data.ok)throw new Error(data.error||'Nem érhető el az adatszámláló.');
   applyOfficialStats(data.official);
+  if(captured)updateCaptureButtons();
  }catch(e){applyOfficialStats({ok:false,error:e.message,label:officialLabel});}
  finally{$('statsRefresh').disabled=false;}
 }
@@ -232,6 +233,32 @@ $('mode').onchange=()=>{
  localStorage.setItem('ba_scan_mode',$('mode').value);
  if(cameraActive){stopCamera();message('Olvasó módja megváltozott','Indítsd újra a kamerát az új módhoz.','warn');}
 };
+function officialState(item){
+ if(!officialReady)return 'FŐTÁBLA (Y): állapot nem elérhető – frissítsd a számlálókat';
+ return officialFound(item)?'FŐTÁBLA (Y): MÁR MEGTALÁLT':'FŐTÁBLA (Y): MÉG NINCS MEGTALÁLVA';
+}
+function phoneState(item){
+ return saved(item)?'TELEFONOS NAPLÓ: MÁR RÖGZÍTVE':'TELEFONOS NAPLÓ: MÉG NINCS BEOLVASVA';
+}
+function renderCaptureInfo(){
+ if(!captured)return;
+ const list=candidates(captured.code);
+ const selected=list.length===1?list[0]:list.find(x=>x.key===captured.key);
+ const duplicate=selected?saved(selected):!list.length&&seenCodes.has(captured.code);
+ $('capturePanel').className='capture-box'+((duplicate||!!(selected&&officialReady&&officialFound(selected)))?' duplicate':'');
+ if(!selected){
+  $('captureInfo').textContent=list.length>1?
+   'TÖBB TALÁLAT AZ EREDETI MUNKA1 LAPON! Válaszd ki a tényleges eszközt. A főtábla Y-állapotát minden választható rekord mellett jelezzük.':
+   'NEM SZEREPEL A TELJES LELTÁRBAN. Megadhatod az eszköz nevét is, ha tudod.';
+  return;
+ }
+ const official=officialState(selected);
+ const phone=phoneState(selected);
+ const note=officialReady&&officialFound(selected)?
+   '\nA főtábla Y cellája már kitöltött. A telefonos rögzítés csak a saját naplóba kerül, és később a szinkronizáló NEM írja felül ezt az Y cellát.':
+   '';
+ $('captureInfo').textContent=`${official}\n${phone}\n\n${selected.name}\nNyilvántartott hely (P): ${selected.expectedRoom||'nincs megadva'}\nKiinduló Y: ${selected.roomCode||'nincs megadva'}\nKiinduló X: ${selected.originalNote||'(üres)'}\nIT-besorolás: ${selected.it}${note}`;
+}
 function updateCaptureButtons(){
  if(!captured)return;
  const list=candidates(captured.code);
@@ -239,9 +266,11 @@ function updateCaptureButtons(){
  const ambiguous=list.length>1&&!selected;
  const duplicate=selected?saved(selected):!list.length&&seenCodes.has(captured.code);
  $('captureSave').disabled=busy||!!pending||ambiguous||duplicate;
- // Ismert, korábban már rögzített tétel X mezője külön módosítható.
+ $('captureSave').textContent=selected&&officialReady&&officialFound(selected)&&!duplicate?'Naplózom (Y már kitöltött)':'Rögzítem';
+ // Telefonos naplóban már létező tételnél a megjegyzés külön frissíthető.
  $('captureNoteSave').classList.toggle('hidden',!(selected&&duplicate));
  $('captureNoteSave').disabled=busy||!!pending||!(selected&&duplicate);
+ renderCaptureInfo();
 }
 function renderCandidates(list){
  const box=$('candidateList');box.replaceChildren();
@@ -251,7 +280,7 @@ function renderCandidates(list){
   radio.disabled=false;
   radio.onchange=()=>{if(captured){captured.key=item.key;updateCaptureButtons();}};
   const detail=document.createElement('span');
-  detail.textContent=`Eszköz: ${item.assetId} | Alszám: ${item.subnumber}\n${item.name}\nHivatalos hely: ${item.expectedRoom||'nincs'}${saved(item)?'\nMÁR RÖGZÍTVE':''}`;
+  detail.textContent=`Eszköz: ${item.assetId} | Alszám: ${item.subnumber}\n${item.name}\nNyilvántartott hely: ${item.expectedRoom||'nincs'}\n${officialState(item)}\n${phoneState(item)}`;
   label.append(radio,detail);box.append(label);
  }
 }
@@ -259,23 +288,19 @@ function captureDisplay(code,engine){
  if(captured||pending||busy||(Date.now()<suppress.until&&suppress.code===code))return;
  const list=candidates(code),ambiguous=list.length>1,duplicate=list.length===1?saved(list[0]):list.length===0&&seenCodes.has(code);
  captured={code,engine,key:list.length===1?list[0].key:''};
- $('capturePanel').className='capture-box'+(duplicate?' duplicate':'');
  $('captureEngine').textContent='Felismerte: '+engine;
  $('captureCode').textContent=code;
  $('candidateWrap').classList.toggle('hidden',!ambiguous);
  $('candidateList').replaceChildren();
  if(ambiguous)renderCandidates(list);
- $('captureInfo').textContent=ambiguous?
-  'TÖBB TALÁLAT AZ EREDETI MUNKA1 LAPON! Válaszd ki, melyik tényleges eszközt találtad meg. Egyetlen rekordot sem választunk helyetted.':
-  duplicate?'DUPLIKÁTUM: ezt a tételt már leltároztad. Új leltársor nem lesz, de az X megjegyzést módosíthatod.':
-  list.length===1?`${list[0].name}\nHivatalos hely (P): ${list[0].expectedRoom||'nincs megadva'}\nEredeti helyiségkód (Y): ${list[0].roomCode||'nincs megadva'}\nEredeti X: ${list[0].originalNote||'(üres)'}\nIT-besorolás: ${list[0].it}`:
-  'NEM SZEREPEL A TELJES LELTÁRBAN. Megadhatod az eszköz nevét is, ha tudod.';
  $('captureName').value='';$('captureNote').value='';
  $('captureNameWrap').classList.toggle('hidden',list.length>0||duplicate);
  updateCaptureButtons();
  $('cameraStatus').textContent=`Felismert: ${code}. Válassz: Rögzítem vagy Kihagyom.`;
- if(duplicate)message('Duplikátum – nincs mentés',code,'warn');
- if(ambiguous)message('Több találat – döntés szükséges','Válaszd ki az eredeti A+B rekordot.','warn');
+ if(duplicate)message('Telefonos naplóban már rögzítve',code,'warn');
+ else if(ambiguous)message('Több találat – döntés szükséges','Válaszd ki az eredeti A+B rekordot.','warn');
+ else if(list.length===1&&officialReady&&officialFound(list[0]))
+  message('A főtáblában már megtalált','Az Y már ki van töltve. A telefonos beolvasást külön naplózhatod, de az Y nem változik.','warn');
 }
 function acceptCameraCode(raw,engine){
  const code=actualCode(raw);if(!code)return;
@@ -498,7 +523,7 @@ async function searchCode(){
   if(!r.found){$('searchResult').textContent=code+'\nNincs benne a teljes leltárban. A keresés nem rögzített semmit.';return;}
   const results=r.candidates||[];
   $('searchResult').textContent=results.length>1?'TÖBB FORRÁSREKORD ('+results.length+')\n\n':'';
-  $('searchResult').textContent+=results.map(x=>`${x.code} • A:${x.assetId} / B:${x.subnumber}\nEszköz: ${x.name}\nHivatalos hely (P): ${x.expectedRoom||'nincs megadva'}\nEredeti Y: ${x.roomCode||'nincs megadva'}\nEredeti X: ${x.originalNote||'(üres)'}\nIT: ${x.it}\n${x.scanned?'MÁR LELTÁROZVA':'MÉG NEM LELTÁROZVA'}`).join('\n\n');
+  $('searchResult').textContent+=results.map(x=>`${x.code} • A:${x.assetId} / B:${x.subnumber}\nEszköz: ${x.name}\nNyilvántartott hely (P): ${x.expectedRoom||'nincs megadva'}\nKiinduló Y: ${x.roomCode||'nincs megadva'}\nKiinduló X: ${x.originalNote||'(üres)'}\nIT: ${x.it}\n${officialState(x)}\n${phoneState(x)}`).join('\n\n');
  }catch(err){$('searchResult').textContent='Keresési hiba: '+err.message;}
  finally{$('searchBtn').disabled=false;}
 }
