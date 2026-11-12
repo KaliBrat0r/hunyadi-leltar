@@ -4,17 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#12273d">
-<title>Hunyadi leltározó 4.0 – ÚJ_LELTÁR</title>
+<title>Hunyadi leltározó 6.0 – X/Y és főtábla számlálók</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1828;--panel:#15283e;--line:#35506a;--text:#f2f7fd;--muted:#a8bdd1;--accent:#5db7ff;--good:#72ebaa;--warn:#fbd16d;--bad:#ff8888}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px}main{max-width:630px;margin:0 auto;padding:18px 16px 70px}h1{font-size:24px;margin:5px 0}h2{font-size:18px;margin:0 0 13px}p{line-height:1.45;margin:8px 0}.muted,small{color:var(--muted)}header{display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin:13px 0}label{display:block;font-weight:650;font-size:14px;margin:12px 0 6px}input,select{width:100%;border:1px solid #56708a;background:#0d1d2e;color:var(--text);padding:13px 12px;font-size:16px;border-radius:11px;outline:none}input:focus,select:focus{border-color:#6ab9ff}button{background:#389cde;border:0;color:#071a29;font-size:16px;font-weight:750;padding:12px 16px;border-radius:11px;cursor:pointer}button.secondary{color:#dfebf6;background:#304963}button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}button:disabled{opacity:.42;cursor:not-allowed}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.buttons button{flex:1;min-width:115px}.mini{font-size:13px;padding:8px 11px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stats+.stats{margin-top:9px}.itstat{background:#164640}.itstat strong{color:#9af0c6}.stat{background:#19344f;border-radius:11px;padding:12px;text-align:center}.stat strong{display:block;font-size:26px;line-height:1.25}.stat span{font-size:12px;color:var(--muted)}.video-wrap{position:relative;border-radius:14px;overflow:hidden;min-height:180px;background:#070e17}.video-wrap video{width:100%;height:255px;display:block;object-fit:cover}.line{position:absolute;left:12%;right:12%;top:48%;height:2px;background:#69d5ff;box-shadow:0 0 13px #69d5ff;pointer-events:none}.message{border-radius:12px;padding:14px;margin:12px 0;background:#23415b;line-height:1.5;min-height:62px}.message.good{background:#143f32;border:1px solid #338e66}.message.warn{background:#54411a;border:1px solid #bf9c42}.message.bad{background:#532b32;border:1px solid #ad5663}.message strong{display:block;font-size:19px}.inline{display:flex;gap:8px}.inline input{min-width:0;flex:1}.inline button{white-space:nowrap}.hidden{display:none!important}.preview{color:#bcd1e4;font-size:13px;margin:8px 0}.summary{font-size:13px}.pill{display:inline-block;background:#37516c;padding:5px 9px;border-radius:20px;color:#dfedf7;font-size:12px}footer{margin-top:25px;font-size:12px;color:#7d9ab5}details summary{cursor:pointer;font-weight:700}code{background:#263c53;padding:2px 5px;border-radius:5px}#missing,#missingIt{max-height:220px;overflow:auto}#missing div,#missingIt div{border-top:1px solid #34516b;padding:9px 0;font-size:14px}.capture-box{border:2px solid var(--accent);background:#173c59;border-radius:14px;padding:14px;margin:15px 0}.capture-box .bigcode{font-weight:800;font-size:25px;word-break:break-word;letter-spacing:.025em}.capture-box .detail{white-space:pre-line;line-height:1.45;font-size:14px;margin-top:8px}.capture-box.duplicate{border-color:#edc36d;background:#47391d}.capture-box label{margin-top:10px}.search-result{white-space:pre-line;font-size:14px;line-height:1.6;padding-top:10px}.section-note{font-size:13px;color:var(--muted)}.collapsed{padding:0}.collapsed summary{padding:16px}.collapsed .inner{padding:0 16px 16px;border-top:1px solid var(--line)}@media(max-width:390px){main{padding-left:11px;padding-right:11px}.inline button{padding:10px 12px}.stat strong{font-size:22px}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:16px}main{max-width:630px;margin:0 auto;padding:18px 16px 70px}h1{font-size:24px;margin:5px 0}h2{font-size:18px;margin:0 0 13px}p{line-height:1.45;margin:8px 0}.muted,small{color:var(--muted)}header{display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:18px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin:13px 0}label{display:block;font-weight:650;font-size:14px;margin:12px 0 6px}input,select,textarea{width:100%;border:1px solid #56708a;background:#0d1d2e;color:var(--text);padding:13px 12px;font-size:16px;border-radius:11px;outline:none}input:focus,select:focus,textarea:focus{border-color:#6ab9ff}textarea{min-height:82px;resize:vertical;font-family:inherit;line-height:1.4}button{background:#389cde;border:0;color:#071a29;font-size:16px;font-weight:750;padding:12px 16px;border-radius:11px;cursor:pointer}button.secondary{color:#dfebf6;background:#304963}button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}button:disabled{opacity:.42;cursor:not-allowed}.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}.buttons button{flex:1;min-width:115px}.mini{font-size:13px;padding:8px 11px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stats+.stats{margin-top:9px}.itstat{background:#164640}.itstat strong{color:#9af0c6}.stat{background:#19344f;border-radius:11px;padding:12px;text-align:center}.stat strong{display:block;font-size:26px;line-height:1.25}.stat span{font-size:12px;color:var(--muted)}.video-wrap{position:relative;border-radius:14px;overflow:hidden;min-height:180px;background:#070e17}.video-wrap video{width:100%;height:255px;display:block;object-fit:cover}.line{position:absolute;left:12%;right:12%;top:48%;height:2px;background:#69d5ff;box-shadow:0 0 13px #69d5ff;pointer-events:none}.message{border-radius:12px;padding:14px;margin:12px 0;background:#23415b;line-height:1.5;min-height:62px}.message.good{background:#143f32;border:1px solid #338e66}.message.warn{background:#54411a;border:1px solid #bf9c42}.message.bad{background:#532b32;border:1px solid #ad5663}.message strong{display:block;font-size:19px}.inline{display:flex;gap:8px}.inline input{min-width:0;flex:1}.inline button{white-space:nowrap}.hidden{display:none!important}.preview{color:#bcd1e4;font-size:13px;margin:8px 0}.summary{font-size:13px}.pill{display:inline-block;background:#37516c;padding:5px 9px;border-radius:20px;color:#dfedf7;font-size:12px}footer{margin-top:25px;font-size:12px;color:#7d9ab5}details summary{cursor:pointer;font-weight:700}code{background:#263c53;padding:2px 5px;border-radius:5px}#missing,#missingIt{max-height:220px;overflow:auto}#missing div,#missingIt div{border-top:1px solid #34516b;padding:9px 0;font-size:14px}.capture-box{border:2px solid var(--accent);background:#173c59;border-radius:14px;padding:14px;margin:15px 0}.capture-box .bigcode{font-weight:800;font-size:25px;word-break:break-word;letter-spacing:.025em}.capture-box .detail{white-space:pre-line;line-height:1.45;font-size:14px;margin-top:8px}.capture-box.duplicate{border-color:#edc36d;background:#47391d}.capture-box label{margin-top:10px}.search-result{white-space:pre-line;font-size:14px;line-height:1.6;padding-top:10px}.section-note{font-size:13px;color:var(--muted)}.collapsed{padding:0}.collapsed summary{padding:16px}.collapsed .inner{padding:0 16px 16px;border-top:1px solid var(--line)}@media(max-width:390px){main{padding-left:11px;padding-right:11px}.inline button{padding:10px 12px}.stat strong{font-size:22px}}
 .candidate-option{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0;font-size:14px;font-weight:400}.candidate-option input{width:20px;height:20px;flex:none;margin:2px 0}.candidate-option span{white-space:pre-line}.candidate-option:has(input:disabled){opacity:.55}
 </style>
 <script src="https://unpkg.com/@zxing/browser@0.2.1/umd/zxing-browser.min.js" defer></script>
 </head>
 <body>
 <main>
-<header><div><h1>📦 Hunyadi leltározó</h1><p class="muted">Munka1 alapú új leltár · jóváhagyás · IT-számláló</p></div><button class="ghost mini" id="settingsBtn">Beállítás</button></header>
+<header><div><h1>📦 Hunyadi leltározó</h1><p class="muted">Munka1 alapú leltár · X/Y · főtábla-alapú számlálók</p></div><button class="ghost mini" id="settingsBtn">Beállítás</button></header>
 <div class="panel" id="settings">
 <h2>Kapcsolódás a Google-táblázathoz</h2>
 <label for="url">Apps Script webalkalmazás címe (…/exec)</label>
@@ -27,15 +27,17 @@
 <div class="panel">
 <div class="stats">
  <div class="stat"><strong id="total">–</strong><span>Nyilvántartott</span></div>
- <div class="stat"><strong id="found">–</strong><span>Megtalált</span></div>
- <div class="stat"><strong id="missingCount">–</strong><span>Hátralévő</span></div>
+ <div class="stat"><strong id="found">–</strong><span>Főtáblában megtalált</span></div>
+ <div class="stat"><strong id="missingCount">–</strong><span>Főtáblában hátralévő</span></div>
 </div>
 <div class="stats">
  <div class="stat itstat"><strong id="itTotal">–</strong><span>IT összesen</span></div>
- <div class="stat itstat"><strong id="itFound">–</strong><span>IT megtalálva</span></div>
+ <div class="stat itstat"><strong id="itFound">–</strong><span>IT a főtáblában</span></div>
  <div class="stat itstat"><strong id="itMissing">–</strong><span>IT hátralévő</span></div>
 </div>
 <p class="preview" id="source">Nincs betöltve a Google-táblázat.</p>
+<p class="preview" id="officialInfo">A megtalált számlálók a közös főtábla Y oszlopát követik; csak sikeres szinkron után nőnek a telefonos mentéstől.</p>
+<div class="buttons"><button id="statsRefresh" class="ghost mini" disabled>Főtábla-számlálók frissítése</button></div>
 </div>
 <div class="panel">
 <h2>1. Vonalkódolvasás</h2>
@@ -54,7 +56,9 @@
  <div class="detail" id="captureInfo"></div>
  <div id="candidateWrap" class="hidden"><p class="section-note">Ugyanahhoz a vonalkódhoz több eredeti sor tartozik. Válassz egyet:</p><div id="candidateList"></div></div>
  <div id="captureNameWrap" class="hidden"><label for="captureName">Mit találtunk? (opcionális, ha nincs a leltárban)</label><input id="captureName" maxlength="250" placeholder="Például: fekete USB-mikrofon"></div>
- <div class="buttons"><button id="captureSave">Rögzítem</button><button class="secondary" id="captureSkip">Kihagyom / új beolvasás</button></div>
+ <label for="captureNote">Megjegyzés (X oszlop, opcionális)</label><textarea id="captureNote" maxlength="400" placeholder="Például: 2 db, karcos burkolat, hiányzó tápegység"></textarea>
+ <p class="section-note">Üresen hagyva az eredeti X érték megmarad. A kolléga X mezőjét szinkronizáláskor külön ellenőrizzük.</p>
+ <div class="buttons"><button id="captureSave">Rögzítem</button><button id="captureNoteSave" class="secondary hidden">Megjegyzés frissítése</button><button class="secondary" id="captureSkip">Kihagyom / új beolvasás</button></div>
  <p class="section-note">A felismerés önmagában SEMMIT nem ment. Csak a „Rögzítem” gomb.</p>
 </div>
 <div id="result" class="message" role="status" aria-live="polite">Csatlakozás után elindítható a leltározás.</div>
@@ -64,6 +68,8 @@
  <p class="section-note">Ha a matrica nem olvasható, írd be a leltárszámot. Meglévő kódnál a hivatalos név kerül a naplóba.</p>
  <label for="manual">Leltárszám / vonalkód</label><input id="manual" placeholder="BA-0189415" autocapitalize="characters" spellcheck="false">
  <label for="manualName">Mit találtunk? (opcionális)</label><input id="manualName" maxlength="250" placeholder="Csak akkor hasznos, ha a kód nincs a nyilvántartásban">
+ <label for="manualNote">Megjegyzés (X oszlop, opcionális)</label><textarea id="manualNote" maxlength="400" placeholder="Például: 2 db, hiányzó tartozék"></textarea>
+ <p class="section-note">Ha a kódot már rögzítettük, a kézi rögzítés a megadott X megjegyzést frissítheti.</p>
  <div class="buttons"><button id="send" disabled>Kézi rögzítés</button></div>
 </div></details>
 <div class="panel">
@@ -72,15 +78,16 @@
 <div class="inline"><input id="searchCode" placeholder="Vonalkód / leltárszám" autocapitalize="characters" spellcheck="false"><button id="searchBtn" disabled>Keresés</button></div>
 <div id="searchResult" class="search-result" aria-live="polite"></div>
 </div>
-<details class="panel"><summary>Hiányzó eszközök (<span id="missingDetail">–</span>)</summary><p class="section-note">Az első 120 még nem leltározott eszköz.</p><div id="missing"></div></details>
+<details class="panel"><summary>Hiányzó eszközök (<span id="missingDetail">–</span>)</summary><p class="section-note">Az első 120 eszköz, amelynél a közös főtáblában még üres az Y oszlop.</p><div id="missing"></div></details>
 <details class="panel"><summary>Hiányzó informatikai eszközök (<span id="missingItDetail">–</span>)</summary><div id="missingIt"></div></details>
-<footer>Az ÚJ_LELTÁR a Munka1 A–X adatait, a kiválasztott Y helyiséget és a Z dátumot tartalmazza. Az eredeti Munka1 érintetlen marad.</footer>
+<footer>Az ÚJ_LELTÁR A–W oszlopai a Munka1 adatait tartalmazzák; X = megjegyzés (eredeti vagy telefonos), Y = tényleges helyiség, Z = dátum. Az eredeti Munka1 érintetlen marad.</footer>
 </main>
 <script>
 
 'use strict';
 const $ = id => document.getElementById(id);
 let inventory = new Map(), allItems=[], seenCodes = new Set(), seenKeys = new Set();
+let officialKeys=new Set(),officialReady=false,officialLabel="",officialTime="";
 let controls=null, reader=null, cameraActive=false, nativeDetector=null, nativeTimer=null, nativeBusy=false;
 let busy=false, pending=null, captured=null, suppress={code:'',until:0};
 let cameraSession=0;
@@ -147,7 +154,9 @@ function populate(data){
  for(const item of allItems){if(!inventory.has(item.code))inventory.set(item.code,[]);inventory.get(item.code).push(item);}
  seenCodes=new Set(data.scannedCodes||[]);seenKeys=new Set(data.scannedKeys||[]);
  $('total').textContent=data.totalUnique;
- $('source').textContent=`Forráslap: ${data.sheetName} • Naplósorok: ${data.scanEvents} • Listán kívüli kódok: ${data.extraUnique}`;
+ $('itTotal').textContent=data.itTotal;
+ $('source').textContent=`Forráslap: ${data.sheetName} • Telefonos napló: ${data.scanEvents} sor • Listán kívüli kódok: ${data.extraUnique}`;
+ applyOfficialStats(data.official);
  $('room').replaceChildren();
  const ph=document.createElement('option');ph.value='';ph.textContent='Válassz helyiséget…';$('room').append(ph);
  for(const room of data.roomOptions||[]){const op=document.createElement('option');op.value=room;op.textContent=room;$('room').append(op);}
@@ -155,8 +164,35 @@ function populate(data){
  renderCounts();
  $('start').disabled=false;$('send').disabled=false;$('searchBtn').disabled=false;
  $('settings').classList.add('hidden');
- message('Kapcsolódva','A felismerés csak előnézet. Rögzítés kizárólag jóváhagyással.','good');
+ $('statsRefresh').disabled=false;
+ message('Kapcsolódva','A felismerés csak előnézet. A főtábla-számlálók Y-alapúak; saját mentésed csak szinkron után jelenik meg bennük.','good');
 }
+function officialFound(item){return officialKeys.has(item.key);}
+function applyOfficialStats(official){
+ const info=$('officialInfo');
+ if(!official||!official.ok){
+  officialReady=false;officialKeys.clear();officialLabel=official?.label||'';officialTime='';
+  info.textContent='A közös főtábla számlálója nem olvasható: '+(official?.error||'Ismeretlen hiba')+
+   '. A telefonos beolvasás ettől még használható. A számlálók helyén – jelenik meg.';
+ }else{
+  officialReady=true;officialKeys=new Set(official.foundKeys||[]);
+  officialLabel=official.label||'FŐTÁBLA';officialTime=official.checkedAt||'';
+  info.textContent=`${officialLabel} · Főtábla Y oszlopa: ${official.found} / ${official.total} kitöltve · Ellenőrizve: ${officialTime}. `+
+   'A telefonos mentés csak a következő szinkronizálás után jelenik meg itt.';
+ }
+ renderCounts();
+}
+async function refreshOfficialCounts(){
+ if(!apiToken||!apiUrl)return;
+ $('statsRefresh').disabled=true;
+ try{
+  const data=await requestJsonp({action:'officialStats'});
+  if(!data.ok)throw new Error(data.error||'Nem érhető el az adatszámláló.');
+  applyOfficialStats(data.official);
+ }catch(e){applyOfficialStats({ok:false,error:e.message,label:officialLabel});}
+ finally{$('statsRefresh').disabled=false;}
+}
+$('statsRefresh').onclick=refreshOfficialCounts;
 function renderMissing(id,items){
  const el=$(id);el.replaceChildren(...items.slice(0,120).map(item=>{
   const div=document.createElement('div');div.textContent=`${item.code} · ${item.name}${item.expectedRoom?' · '+item.expectedRoom:''}${candidates(item.code).length>1?' · A/B: '+item.assetId+'/'+item.subnumber:''}`;return div;
@@ -164,19 +200,27 @@ function renderMissing(id,items){
  if(items.length>120){const div=document.createElement('div');div.textContent=`…és még ${items.length-120} eszköz.`;el.append(div);}
 }
 function renderCounts(){
- const items=allItems,done=items.filter(x=>saved(x)).length;
- $('found').textContent=done;$('missingCount').textContent=items.length-done;$('missingDetail').textContent=items.length-done;
- const it=items.filter(x=>x.it==='IGEN'),itDone=it.filter(x=>saved(x)).length;
+ const items=allItems;
+ if(!officialReady){
+  for(const id of ['found','missingCount','itFound','itMissing','missingDetail','missingItDetail'])$(id).textContent='–';
+  $('missing').replaceChildren();$('missingIt').replaceChildren();
+  return;
+ }
+ const found=items.filter(officialFound).length;
+ $('found').textContent=found;$('missingCount').textContent=items.length-found;$('missingDetail').textContent=items.length-found;
+ const it=items.filter(x=>x.it==='IGEN'),itDone=it.filter(officialFound).length;
  $('itTotal').textContent=it.length;$('itFound').textContent=itDone;$('itMissing').textContent=it.length-itDone;
  $('missingItDetail').textContent=it.length-itDone;
- renderMissing('missing',items.filter(x=>!saved(x)));renderMissing('missingIt',it.filter(x=>!saved(x)));
+ renderMissing('missing',items.filter(x=>!officialFound(x)));
+ renderMissing('missingIt',it.filter(x=>!officialFound(x)));
 }
+
 async function loadInventory(){
  try{
   checkConfig();message('Kapcsolódás…','Google-táblázat lekérése.');
   const data=await requestJsonp({action:'list'});
   if(!data.ok)throw new Error(data.error||'Ismeretlen válasz');
-  if(data.version!==4)throw new Error('A Google Apps Script még nem a 4. verziót futtatja. Telepítsd új verzióként a Code.gs-t!');
+  if(data.version!==6)throw new Error('Előbb a 6. verziójú Apps Scriptet kell telepíteni.');
   localStorage.setItem('ba_api',apiUrl);localStorage.setItem('ba_token',apiToken);
   populate(data);
   const old=localStorage.getItem('ba_pending');
@@ -188,13 +232,24 @@ $('mode').onchange=()=>{
  localStorage.setItem('ba_scan_mode',$('mode').value);
  if(cameraActive){stopCamera();message('Olvasó módja megváltozott','Indítsd újra a kamerát az új módhoz.','warn');}
 };
+function updateCaptureButtons(){
+ if(!captured)return;
+ const list=candidates(captured.code);
+ const selected=list.length===1?list[0]:list.find(x=>x.key===captured.key);
+ const ambiguous=list.length>1&&!selected;
+ const duplicate=selected?saved(selected):!list.length&&seenCodes.has(captured.code);
+ $('captureSave').disabled=busy||!!pending||ambiguous||duplicate;
+ // Ismert, korábban már rögzített tétel X mezője külön módosítható.
+ $('captureNoteSave').classList.toggle('hidden',!(selected&&duplicate));
+ $('captureNoteSave').disabled=busy||!!pending||!(selected&&duplicate);
+}
 function renderCandidates(list){
  const box=$('candidateList');box.replaceChildren();
  for(const item of list){
   const label=document.createElement('label');label.className='candidate-option';
   const radio=document.createElement('input');radio.type='radio';radio.name='leltarTetel';radio.value=item.key;
-  radio.disabled=saved(item);
-  radio.onchange=()=>{if(captured){captured.key=item.key;$('captureSave').disabled=saved(item);}};
+  radio.disabled=false;
+  radio.onchange=()=>{if(captured){captured.key=item.key;updateCaptureButtons();}};
   const detail=document.createElement('span');
   detail.textContent=`Eszköz: ${item.assetId} | Alszám: ${item.subnumber}\n${item.name}\nHivatalos hely: ${item.expectedRoom||'nincs'}${saved(item)?'\nMÁR RÖGZÍTVE':''}`;
   label.append(radio,detail);box.append(label);
@@ -212,12 +267,12 @@ function captureDisplay(code,engine){
  if(ambiguous)renderCandidates(list);
  $('captureInfo').textContent=ambiguous?
   'TÖBB TALÁLAT AZ EREDETI MUNKA1 LAPON! Válaszd ki, melyik tényleges eszközt találtad meg. Egyetlen rekordot sem választunk helyetted.':
-  duplicate?'DUPLIKÁTUM: ezt a tételt már leltároztad. Nem rögzítjük újra.':
-  list.length===1?`${list[0].name}\nHivatalos hely (P): ${list[0].expectedRoom||'nincs megadva'}\nEredeti helyiségkód (Y): ${list[0].roomCode||'nincs megadva'}\nIT-besorolás: ${list[0].it}`:
+  duplicate?'DUPLIKÁTUM: ezt a tételt már leltároztad. Új leltársor nem lesz, de az X megjegyzést módosíthatod.':
+  list.length===1?`${list[0].name}\nHivatalos hely (P): ${list[0].expectedRoom||'nincs megadva'}\nEredeti helyiségkód (Y): ${list[0].roomCode||'nincs megadva'}\nEredeti X: ${list[0].originalNote||'(üres)'}\nIT-besorolás: ${list[0].it}`:
   'NEM SZEREPEL A TELJES LELTÁRBAN. Megadhatod az eszköz nevét is, ha tudod.';
- $('captureName').value='';
+ $('captureName').value='';$('captureNote').value='';
  $('captureNameWrap').classList.toggle('hidden',list.length>0||duplicate);
- $('captureSave').disabled=duplicate||ambiguous;
+ updateCaptureButtons();
  $('cameraStatus').textContent=`Felismert: ${code}. Válassz: Rögzítem vagy Kihagyom.`;
  if(duplicate)message('Duplikátum – nincs mentés',code,'warn');
  if(ambiguous)message('Több találat – döntés szükséges','Válaszd ki az eredeti A+B rekordot.','warn');
@@ -233,9 +288,13 @@ function dismissCapture(){
  $('cameraStatus').textContent=cameraActive?'Kamera aktív, keresem a következő vonalkódot…':'Kamera leállítva.';
 }
 $('captureSkip').onclick=dismissCapture;
+$('captureNoteSave').onclick=async()=>{
+ if(!captured)return;
+ await submitNoteUpdate(captured.code,$('captureNote').value,captured.key);
+};
 $('captureSave').onclick=async()=>{
  if(!captured)return;
- await submitCode(captured.code,$('captureName').value,captured.key);
+ await submitCode(captured.code,$('captureName').value,captured.key,$('captureNote').value);
 };
 async function prepareNative(){
  if(!('BarcodeDetector' in window))throw new Error('A böngésződ nem támogatja a beépített vonalkódfelismerőt. Válaszd a Vegyes vagy a ZXing módot.');
@@ -309,11 +368,13 @@ function stopCamera(){
 $('start').onclick=startCamera;$('stop').onclick=stopCamera;
 function operationId(){return 'ba_'+(crypto.randomUUID?crypto.randomUUID().replaceAll('-',''):String(Date.now())+Math.random().toString(36).slice(2));}
 function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
-async function verify(id,code,recordKey){
+async function verify(id,code,recordKey,operation){
  for(const ms of [650,1000,1400,1800,2400,3000]){
   await sleep(ms);
-  try{const x=await requestJsonp({action:'check',requestId:id,code,recordKey:recordKey||''});if(!x.ok)throw new Error(x.error||'Ellenőrzési hiba');if(x.found)return x.data;}
-  catch(err){console.warn('Visszaellenőrzés:',err.message);}
+  try{const x=await requestJsonp({action:'check',requestId:id,code,recordKey:recordKey||'',kind:operation||'scan'});
+   if(!x.ok){const err=new Error(x.error||'Ellenőrzési hiba');err.permanent=!!x.rejected;throw err;}
+   if(x.found)return x.data;
+  }catch(err){if(err.permanent)throw err;console.warn('Visszaellenőrzés:',err.message);}
  }
  return null;
 }
@@ -326,11 +387,12 @@ function showSaved(data){
  const statuses={RENDBEN:['✓ Leltározva, az ÚJ_LELTÁR frissült','good'],
   MÁS_HELYEN:['↔ Más helyiségben, az ÚJ_LELTÁR frissült','warn'],
   NINCS_A_LISTÁBAN:['! Nincs a teljes leltárban – külön listán rögzítve','warn'],
-  ISMÉTELT:['↻ Duplikátum – nem rögzítettük újra','warn']};
+  ISMÉTELT:['↻ Duplikátum – nem rögzítettük újra','warn'],
+  MEGJEGYZÉS_FRISSÍTVE:['✓ X megjegyzés frissítve, új leltársor nélkül','good']};
  const status=statuses[data.status]||['Rögzítve','good'];
  const desc=[data.code,item?'Eszköz/alszám: '+item.assetId+'/'+item.subnumber:'',data.name,
   data.expectedRoom?'Hivatalos hely: '+data.expectedRoom:'',data.roomCode?'Régi helyiségkód: '+data.roomCode:'',
-  'Mostani hely: '+data.actualRoom,
+  'Mostani hely: '+data.actualRoom, data.note?'X megjegyzés: '+data.note:'',
   data.it==='IGEN'?'💻 Informatikai':data.it==='NEM'?'Nem informatikai':'IT-besorolás ellenőrizendő'].filter(Boolean).join(' • ');
  message(status[0],desc,status[1]);
  if(navigator.vibrate)navigator.vibrate(duplicate?[60,70,60]:70);
@@ -342,54 +404,89 @@ function finishCapture(code){
 }
 async function sendPending(){
  if(!pending||busy)return;
- busy=true;$('send').disabled=true;$('captureSave').disabled=true;
+ busy=true;$('send').disabled=true;$('captureSave').disabled=true;$('captureNoteSave').disabled=true;
  const op=pending;
  message('Mentés és visszaellenőrzés…',`${op.code} · ${op.room}`);
  try{
   // A no-cors POST-ra a Google nem ad olvasható választ; külön GET-tel ellenőrizzük.
   try{await fetch(apiUrl,{method:'POST',mode:'no-cors',redirect:'follow',headers:{'Content-Type':'text/plain'},body:JSON.stringify(op)});}catch(err){console.warn('POST:',err.message);}
-  const data=await verify(op.requestId,op.code,op.recordKey);
+  const data=await verify(op.requestId,op.code,op.recordKey,op.action);
   if(!data)throw new Error('A mentés nem kapott visszaigazolást. Azonos műveletet próbálj újra a külön gombbal.');
   showSaved(data);
   pending=null;localStorage.removeItem('ba_pending');$('retryWrap').classList.add('hidden');
   finishCapture(op.code);
-  $('manual').value='';$('manualName').value='';
- }catch(err){message('Nincs visszaigazolás a mentésről',err.message,'bad');$('retryWrap').classList.remove('hidden');}
- finally{busy=false;$('send').disabled=inventory.size===0;$('captureSave').disabled=Boolean(pending)||Boolean(captured&&(!captured.key&&candidates(captured.code).length>1));}
+  $('manual').value='';$('manualName').value='';$('manualNote').value='';$('captureNote').value='';
+ }catch(err){
+  if(err.permanent){pending=null;localStorage.removeItem('ba_pending');$('retryWrap').classList.add('hidden');
+    message('A mentés elutasítva',err.message,'bad');}
+  else{message('Nincs visszaigazolás a mentésről',err.message,'bad');$('retryWrap').classList.remove('hidden');}
+ }
+ finally{busy=false;$('send').disabled=inventory.size===0;updateCaptureButtons();}
 }
-async function submitCode(raw,manualName='',selectedKey=''){
+async function submitNoteUpdate(raw,note,selectedKey=''){
+ if(busy||pending){message('Előző mentés még ellenőrizendő','Előbb várd meg a visszaigazolást.','warn');return;}
+ const code=actualCode(raw),list=candidates(code);
+ const selected=list.length===1?list[0]:list.find(x=>x.key===selectedKey);
+ if(!selected||!saved(selected)){message('Nincs korábbi tétel','X megjegyzés módosítása csak korábban rögzített eszköznél lehetséges.','warn');return;}
+ const newNote=String(note||'').trim().slice(0,400);
+ if(!newNote){message('Hiányzik a megjegyzés','Üres X értékkel nem törlünk korábbi adatot.','warn');return;}
+ busy=true;$('send').disabled=true;$('captureSave').disabled=true;$('captureNoteSave').disabled=true;
+ try{
+  const before=await requestJsonp({action:'preflight',code,recordKey:selected.key});
+  if(!before.ok)throw new Error(before.error||'Előellenőrzési hiba');
+  if(!before.duplicate)throw new Error('Ezt a tételt a szerver még nem tekinti rögzítettnek. Frissítsd az oldalt.');
+  const current=String(before.data?.note||'');
+  if(current===newNote){message('Az X megjegyzés már egyezik',current,'warn');return;}
+  pending={action:'note',token:apiToken,requestId:operationId(),code,recordKey:selected.key,note:newNote,expectedNote:current,room:chosenRoom()};
+  localStorage.setItem('ba_pending',JSON.stringify(pending));
+ }catch(err){message('Megjegyzés nem frissíthető',err.message,'bad');return;}
+ finally{busy=false;$('send').disabled=inventory.size===0;updateCaptureButtons();}
+ await sendPending();
+}
+async function submitCode(raw,manualName='',selectedKey='',note=''){
  if(busy||pending){message('Előző mentés még ellenőrizendő','Ne küldj új kódot, amíg a régi függőben van.','warn');return;}
- const room=ensureRoom();if(!room)return;
+ const room=chosenRoom();
  if(!apiUrl||!apiToken||inventory.size===0){message('Nincs kapcsolat','Előbb csatlakozz a táblázathoz.','warn');return;}
  const code=actualCode(raw);
  if(!code){message('Érvénytelen leltárszám','Ellenőrizd a vonalkód tartalmát.','bad');return;}
  const list=candidates(code);
  if(list.length>1&&!selectedKey){
   captureDisplay(code,'Kézi bevitel – több találat');
-  message('Több forrásrekord','Felül válaszd ki az eredeti A+B tételt, majd nyomd meg a Rögzítem gombot.','warn');
+  $('captureNote').value=String(note||'').trim().slice(0,400);
+  message('Több forrásrekord','Felül válaszd ki az eredeti A+B tételt, majd nyomd meg a megfelelő gombot.','warn');
   return;
  }
  const selected=list.length===1?list[0]:list.find(x=>x.key===selectedKey);
  if(list.length>0&&!selected){message('Hibás tételválasztás','Ezt a tételt a vonalkódhoz nem találom.','bad');return;}
+ if(selected&&saved(selected)&&String(note||'').trim()){
+  await submitNoteUpdate(code,note,selected.key);return;
+ }
  if((selected&&saved(selected))||(!list.length&&seenCodes.has(code))){
   showSaved({code,key:selected?.key||'',name:selected?.name||'Korábban rögzített listán kívüli kód',
    expectedRoom:selected?.expectedRoom||'',roomCode:selected?.roomCode||'',actualRoom:room,status:'ISMÉTELT',it:selected?.it||'ELLENŐRIZENDŐ'});
   finishCapture(code);return;
  }
+ if(!ensureRoom())return;
  busy=true;$('send').disabled=true;$('captureSave').disabled=true;
  try{
   const recordKey=selected?.key||'';
   const before=await requestJsonp({action:'preflight',code,recordKey});
   if(!before.ok)throw new Error(before.error||'Előellenőrzési hiba');
-  if(before.duplicate){showSaved(before.data);finishCapture(code);return;}
-  pending={action:'scan',token:apiToken,requestId:operationId(),code,recordKey,room,manualName:String(manualName||'').trim().slice(0,250)};
+  if(before.duplicate){
+   if(selected&&String(note||'').trim()){
+    message('Közben valaki rögzítette ezt a tételt','Frissítsd az adatokat, majd módosítsd külön az X megjegyzést.','warn');
+   }else{showSaved(before.data);finishCapture(code);}
+   return;
+  }
+  pending={action:'scan',token:apiToken,requestId:operationId(),code,recordKey,room,
+   manualName:String(manualName||'').trim().slice(0,250),note:String(note||'').trim().slice(0,400)};
   localStorage.setItem('ba_pending',JSON.stringify(pending));
  }catch(err){message('Nem sikerült ellenőrizni a kódot',err.message,'bad');return;}
- finally{busy=false;$('send').disabled=inventory.size===0;$('captureSave').disabled=Boolean(pending)||Boolean(captured&&(!captured.key&&candidates(captured.code).length>1));}
+ finally{busy=false;$('send').disabled=inventory.size===0;updateCaptureButtons();}
  await sendPending();
 }
-$('send').onclick=()=>submitCode($('manual').value,$('manualName').value);
-$('manual').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitCode($('manual').value,$('manualName').value);}});
+$('send').onclick=()=>submitCode($('manual').value,$('manualName').value,'',$('manualNote').value);
+$('manual').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitCode($('manual').value,$('manualName').value,'',$('manualNote').value);}});
 $('retry').onclick=sendPending;
 async function searchCode(){
  const code=actualCode($('searchCode').value);
@@ -401,7 +498,7 @@ async function searchCode(){
   if(!r.found){$('searchResult').textContent=code+'\nNincs benne a teljes leltárban. A keresés nem rögzített semmit.';return;}
   const results=r.candidates||[];
   $('searchResult').textContent=results.length>1?'TÖBB FORRÁSREKORD ('+results.length+')\n\n':'';
-  $('searchResult').textContent+=results.map(x=>`${x.code} • A:${x.assetId} / B:${x.subnumber}\nEszköz: ${x.name}\nHivatalos hely (P): ${x.expectedRoom||'nincs megadva'}\nEredeti Y: ${x.roomCode||'nincs megadva'}\nIT: ${x.it}\n${x.scanned?'MÁR LELTÁROZVA':'MÉG NEM LELTÁROZVA'}`).join('\n\n');
+  $('searchResult').textContent+=results.map(x=>`${x.code} • A:${x.assetId} / B:${x.subnumber}\nEszköz: ${x.name}\nHivatalos hely (P): ${x.expectedRoom||'nincs megadva'}\nEredeti Y: ${x.roomCode||'nincs megadva'}\nEredeti X: ${x.originalNote||'(üres)'}\nIT: ${x.it}\n${x.scanned?'MÁR LELTÁROZVA':'MÉG NEM LELTÁROZVA'}`).join('\n\n');
  }catch(err){$('searchResult').textContent='Keresési hiba: '+err.message;}
  finally{$('searchBtn').disabled=false;}
 }
